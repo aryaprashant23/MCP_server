@@ -61,7 +61,16 @@ export function KPICards() {
   );
 }
 
-function Card({ title, value, icon, trend, trendUp, color }: any) {
+interface CardProps {
+  title: string;
+  value: string;
+  icon: React.ReactNode;
+  trend: string;
+  trendUp: boolean;
+  color: string;
+}
+
+function Card({ title, value, icon, trend, trendUp, color }: CardProps) {
   return (
     <div className={`relative overflow-hidden rounded-2xl p-6 bg-gradient-to-br ${color} bg-opacity-20 backdrop-blur-xl border border-white/10 shadow-2xl transition-all duration-300 hover:-translate-y-1 hover:shadow-emerald-500/10`}>
       <div className="flex justify-between items-start mb-4">
