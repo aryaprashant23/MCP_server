@@ -1,0 +1,28 @@
+{
+  "name": "weekly-review-pulse",
+  "version": "1.0.0",
+  "description": "Weekly Review Pulse Orchestrator",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "node --test",
+    "cron": "node src/cron.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "app-store-scraper": "^0.17.0",
+    "dotenv": "^16.4.5",
+    "google-play-scraper": "^10.0.0",
+    "groq-sdk": "^0.3.2",
+    "node-cron": "^3.0.3",
+    "pg": "^8.11.3"
+  },
+  "devDependencies": {
+    "eslint": "^9.0.0",
+    "prettier": "^3.0.0"
+  }
+}

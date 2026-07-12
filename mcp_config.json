@@ -1,0 +1,6 @@
+{
+  "google-workspace": {
+    "type": "sse",
+    "url": "https://web-production-b1553.up.railway.app/mcp"
+  }
+}

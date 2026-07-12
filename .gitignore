@@ -1,0 +1,12 @@
+node_modules/
+.env
+.DS_Store
+
+# Google OAuth credentials & token cache
+credentials.json
+token.json
+
+# Generated output files
+weekly_pulse.md
+theme_data.json
+email_draft.txt
