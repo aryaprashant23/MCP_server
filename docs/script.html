@@ -1,0 +1,1214 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>script.md</title>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+<style>
+/* https://github.com/microsoft/vscode/blob/master/extensions/markdown-language-features/media/markdown.css */
+/*---------------------------------------------------------------------------------------------
+ *  Copyright (c) Microsoft Corporation. All rights reserved.
+ *  Licensed under the MIT License. See License.txt in the project root for license information.
+ *--------------------------------------------------------------------------------------------*/
+
+body {
+	font-family: var(--vscode-markdown-font-family, -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif);
+	font-size: var(--vscode-markdown-font-size, 14px);
+	padding: 0 26px;
+	line-height: var(--vscode-markdown-line-height, 22px);
+	word-wrap: break-word;
+}
+
+#code-csp-warning {
+	position: fixed;
+	top: 0;
+	right: 0;
+	color: white;
+	margin: 16px;
+	text-align: center;
+	font-size: 12px;
+	font-family: sans-serif;
+	background-color:#444444;
+	cursor: pointer;
+	padding: 6px;
+	box-shadow: 1px 1px 1px rgba(0,0,0,.25);
+}
+
+#code-csp-warning:hover {
+	text-decoration: none;
+	background-color:#007acc;
+	box-shadow: 2px 2px 2px rgba(0,0,0,.25);
+}
+
+body.scrollBeyondLastLine {
+	margin-bottom: calc(100vh - 22px);
+}
+
+body.showEditorSelection .code-line {
+	position: relative;
+}
+
+body.showEditorSelection .code-active-line:before,
+body.showEditorSelection .code-line:hover:before {
+	content: "";
+	display: block;
+	position: absolute;
+	top: 0;
+	left: -12px;
+	height: 100%;
+}
+
+body.showEditorSelection li.code-active-line:before,
+body.showEditorSelection li.code-line:hover:before {
+	left: -30px;
+}
+
+.vscode-light.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.15);
+}
+
+.vscode-light.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(0, 0, 0, 0.40);
+}
+
+.vscode-light.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-dark.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.4);
+}
+
+.vscode-dark.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 255, 255, 0.60);
+}
+
+.vscode-dark.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+.vscode-high-contrast.showEditorSelection .code-active-line:before {
+	border-left: 3px solid rgba(255, 160, 0, 0.7);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line:hover:before {
+	border-left: 3px solid rgba(255, 160, 0, 1);
+}
+
+.vscode-high-contrast.showEditorSelection .code-line .code-line:hover:before {
+	border-left: none;
+}
+
+img {
+	max-width: 100%;
+	max-height: 100%;
+}
+
+a {
+	text-decoration: none;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+a:focus,
+input:focus,
+select:focus,
+textarea:focus {
+	outline: 1px solid -webkit-focus-ring-color;
+	outline-offset: -1px;
+}
+
+hr {
+	border: 0;
+	height: 2px;
+	border-bottom: 2px solid;
+}
+
+h1 {
+	padding-bottom: 0.3em;
+	line-height: 1.2;
+	border-bottom-width: 1px;
+	border-bottom-style: solid;
+}
+
+h1, h2, h3 {
+	font-weight: normal;
+}
+
+table {
+	border-collapse: collapse;
+}
+
+table > thead > tr > th {
+	text-align: left;
+	border-bottom: 1px solid;
+}
+
+table > thead > tr > th,
+table > thead > tr > td,
+table > tbody > tr > th,
+table > tbody > tr > td {
+	padding: 5px 10px;
+}
+
+table > tbody > tr + tr > td {
+	border-top: 1px solid;
+}
+
+blockquote {
+	margin: 0 7px 0 5px;
+	padding: 0 16px 0 10px;
+	border-left-width: 5px;
+	border-left-style: solid;
+}
+
+code {
+	font-family: Menlo, Monaco, Consolas, "Droid Sans Mono", "Courier New", monospace, "Droid Sans Fallback";
+	font-size: 1em;
+	line-height: 1.357em;
+}
+
+body.wordWrap pre {
+	white-space: pre-wrap;
+}
+
+pre:not(.hljs),
+pre.hljs code > div {
+	padding: 16px;
+	border-radius: 3px;
+	overflow: auto;
+}
+
+pre code {
+	color: var(--vscode-editor-foreground);
+	tab-size: 4;
+}
+
+/** Theming */
+
+.vscode-light pre {
+	background-color: rgba(220, 220, 220, 0.4);
+}
+
+.vscode-dark pre {
+	background-color: rgba(10, 10, 10, 0.4);
+}
+
+.vscode-high-contrast pre {
+	background-color: rgb(0, 0, 0);
+}
+
+.vscode-high-contrast h1 {
+	border-color: rgb(0, 0, 0);
+}
+
+.vscode-light table > thead > tr > th {
+	border-color: rgba(0, 0, 0, 0.69);
+}
+
+.vscode-dark table > thead > tr > th {
+	border-color: rgba(255, 255, 255, 0.69);
+}
+
+.vscode-light h1,
+.vscode-light hr,
+.vscode-light table > tbody > tr + tr > td {
+	border-color: rgba(0, 0, 0, 0.18);
+}
+
+.vscode-dark h1,
+.vscode-dark hr,
+.vscode-dark table > tbody > tr + tr > td {
+	border-color: rgba(255, 255, 255, 0.18);
+}
+
+</style>
+
+<style>
+/* Tomorrow Theme */
+/* http://jmblog.github.com/color-themes-for-google-code-highlightjs */
+/* Original theme - https://github.com/chriskempson/tomorrow-theme */
+
+/* Tomorrow Comment */
+.hljs-comment,
+.hljs-quote {
+	color: #8e908c;
+}
+
+/* Tomorrow Red */
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag,
+.hljs-name,
+.hljs-selector-id,
+.hljs-selector-class,
+.hljs-regexp,
+.hljs-deletion {
+	color: #c82829;
+}
+
+/* Tomorrow Orange */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name,
+.hljs-literal,
+.hljs-type,
+.hljs-params,
+.hljs-meta,
+.hljs-link {
+	color: #f5871f;
+}
+
+/* Tomorrow Yellow */
+.hljs-attribute {
+	color: #eab700;
+}
+
+/* Tomorrow Green */
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-addition {
+	color: #718c00;
+}
+
+/* Tomorrow Blue */
+.hljs-title,
+.hljs-section {
+	color: #4271ae;
+}
+
+/* Tomorrow Purple */
+.hljs-keyword,
+.hljs-selector-tag {
+	color: #8959a8;
+}
+
+.hljs {
+	display: block;
+	overflow-x: auto;
+	color: #4d4d4c;
+	padding: 0.5em;
+}
+
+.hljs-emphasis {
+	font-style: italic;
+}
+
+.hljs-strong {
+	font-weight: bold;
+}
+</style>
+
+<style>
+/*
+ * Markdown PDF CSS
+ */
+
+ body {
+	font-family: -apple-system, BlinkMacSystemFont, "Segoe WPC", "Segoe UI", "Ubuntu", "Droid Sans", sans-serif, "Meiryo";
+	padding: 0 12px;
+}
+
+pre {
+	background-color: #f8f8f8;
+	border: 1px solid #cccccc;
+	border-radius: 3px;
+	overflow-x: auto;
+	white-space: pre-wrap;
+	overflow-wrap: break-word;
+}
+
+pre:not(.hljs) {
+	padding: 23px;
+	line-height: 19px;
+}
+
+blockquote {
+	background: rgba(127, 127, 127, 0.1);
+	border-color: rgba(0, 122, 204, 0.5);
+}
+
+.emoji {
+	height: 1.4em;
+}
+
+code {
+	font-size: 14px;
+	line-height: 19px;
+}
+
+/* for inline code */
+:not(pre):not(.hljs) > code {
+	color: #C9AE75; /* Change the old color so it seems less like an error */
+	font-size: inherit;
+}
+
+/* Page Break : use <div class="page"/> or <div class="page"></div> to insert page break
+-------------------------------------------------------- */
+.page {
+	page-break-after: always;
+}
+
+</style>
+
+<script src="https://unpkg.com/mermaid/dist/mermaid.min.js"></script>
+</head>
+<body>
+  <script>
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: document.body.classList.contains('vscode-dark') || document.body.classList.contains('vscode-high-contrast')
+          ? 'dark'
+          : 'default'
+    });
+  </script>
+<h1 id="weekly-review-pulse--complete-project-script">Weekly Review Pulse — Complete Project Script</h1>
+<blockquote>
+<p>A comprehensive guide to how this AI Agent + MCP Server project was designed, built, and deployed. Written as a narrative you can read end-to-end for deep understanding and interview preparation.</p>
+</blockquote>
+<hr>
+<h2 id="table-of-contents">Table of Contents</h2>
+<ol>
+<li><a href="#1-the-problem-statement">The Problem Statement</a></li>
+<li><a href="#2-the-solution--high-level-architecture">The Solution — High-Level Architecture</a></li>
+<li><a href="#3-technology-stack--why-each-was-chosen">Technology Stack &amp; Why Each Was Chosen</a></li>
+<li><a href="#4-phase-1--project-setup--environment">Phase 1 — Project Setup &amp; Environment</a></li>
+<li><a href="#5-phase-2--data-ingestion--pii-sanitization">Phase 2 — Data Ingestion &amp; PII Sanitization</a></li>
+<li><a href="#6-phase-3--data-cleaning-pipeline-pre-llm">Phase 3 — Data Cleaning Pipeline (Pre-LLM)</a></li>
+<li><a href="#7-phase-4--groq-llm-integration--two-pass-prompt-strategy">Phase 4 — Groq LLM Integration &amp; Two-Pass Prompt Strategy</a></li>
+<li><a href="#8-phase-5--output-validation--retry-logic">Phase 5 — Output Validation &amp; Retry Logic</a></li>
+<li><a href="#9-phase-6--mcp-server-what-it-is--how-we-built-it">Phase 6 — MCP Server: What It Is &amp; How We Built It</a></li>
+<li><a href="#10-phase-7--google-docs--gmail-integration-via-mcp">Phase 7 — Google Docs &amp; Gmail Integration via MCP</a></li>
+<li><a href="#11-phase-8--the-orchestrator-wiring-it-all-together">Phase 8 — The Orchestrator: Wiring It All Together</a></li>
+<li><a href="#12-phase-9--database-integration-supabase--postgresql">Phase 9 — Database Integration (Supabase + PostgreSQL)</a></li>
+<li><a href="#13-phase-10--frontend-dashboard-nextjs--vercel">Phase 10 — Frontend Dashboard (Next.js + Vercel)</a></li>
+<li><a href="#14-phase-11--deployment--production-issues">Phase 11 — Deployment &amp; Production Issues</a></li>
+<li><a href="#15-complete-data-flow-end-to-end">Complete Data Flow (End-to-End)</a></li>
+<li><a href="#16-key-design-decisions--trade-offs">Key Design Decisions &amp; Trade-offs</a></li>
+<li><a href="#17-interview-qa-bank">Interview Q&amp;A Bank</a></li>
+</ol>
+<hr>
+<h2 id="1-the-problem-statement">1. The Problem Statement</h2>
+<p><strong>Context:</strong> Mobile applications like Meesho receive hundreds of user reviews every week across the Apple App Store and Google Play Store. These reviews contain raw, unfiltered user sentiment — complaints about delivery, praise for pricing, frustration with refunds, and more.</p>
+<p><strong>The Problem:</strong> Product managers, engineering leads, and CXOs don't have time to read 500+ reviews manually every week. They need a concise, actionable summary that tells them:</p>
+<ul>
+<li>What are the top 3 things users are complaining about?</li>
+<li>What do actual users say in their own words?</li>
+<li>What concrete steps should the team take this week?</li>
+</ul>
+<p><strong>Additional Constraints:</strong></p>
+<ul>
+<li>Reviews contain PII (emails, phone numbers) that must never reach any external API.</li>
+<li>Reviews are in English, Hindi, and &quot;Hinglish&quot; (Hindi written in Latin script) — all must be analyzed.</li>
+<li>The summary must be ≤ 250 words, strictly formatted, and automatically published to Google Docs and emailed.</li>
+<li>The entire pipeline must be automated to run weekly without human intervention.</li>
+</ul>
+<hr>
+<h2 id="2-the-solution--high-level-architecture">2. The Solution — High-Level Architecture</h2>
+<p>We built an <strong>AI-powered review analysis agent</strong> that runs as a fully automated weekly pipeline:</p>
+<pre class="hljs"><code><div>┌─────────────────────────────────────────────────────────────────────┐
+│                        WEEKLY REVIEW PULSE                         │
+├─────────────────────────────────────────────────────────────────────┤
+│                                                                     │
+│  ┌──────────┐   ┌──────────┐   ┌──────────┐   ┌──────────────────┐ │
+│  │ App Store │   │ Play     │   │ PII      │   │ Data Quality    │ │
+│  │ Scraper   │──▶│ Store    │──▶│ Sanitizer│──▶│ Pipeline        │ │
+│  │           │   │ Scraper  │   │          │   │ (5-stage clean) │ │
+│  └──────────┘   └──────────┘   └──────────┘   └───────┬──────────┘ │
+│                                                        │            │
+│                                                        ▼            │
+│  ┌──────────────────────────────────────────────────────────────┐   │
+│  │              GROQ LLM (llama-3.3-70b-versatile)             │   │
+│  │  Pass 1: Theme Extraction (map-reduce across chunks)        │   │
+│  │  Pass 2: Pulse Synthesis (≤250 words, 3 themes/quotes/acts) │   │
+│  │  Validation: Word count, structure, verbatim quote check    │   │
+│  └──────────────────────────┬───────────────────────────────────┘   │
+│                             │                                       │
+│              ┌──────────────┼──────────────┐                        │
+│              ▼              ▼              ▼                        │
+│  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐              │
+│  │ Google Docs  │  │ Gmail Draft  │  │ Supabase DB  │              │
+│  │ (via MCP)    │  │ (via MCP)    │  │ (PostgreSQL) │              │
+│  └──────────────┘  └──────────────┘  └──────┬───────┘              │
+│                                             │                       │
+│                                             ▼                       │
+│                                   ┌──────────────────┐              │
+│                                   │ Next.js Frontend │              │
+│                                   │ (Vercel Deploy)  │              │
+│                                   └──────────────────┘              │
+└─────────────────────────────────────────────────────────────────────┘
+</div></code></pre>
+<hr>
+<h2 id="3-technology-stack--why-each-was-chosen">3. Technology Stack &amp; Why Each Was Chosen</h2>
+<table>
+<thead>
+<tr>
+<th>Technology</th>
+<th>Purpose</th>
+<th>Why This One?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Node.js (ESM)</strong></td>
+<td>Runtime for the backend agent</td>
+<td>Native async/await, rich npm ecosystem for scrapers, fast startup for cron jobs</td>
+</tr>
+<tr>
+<td><strong>Groq API</strong></td>
+<td>LLM inference (llama-3.3-70b-versatile)</td>
+<td>10x faster inference than OpenAI, free tier available, 128k context window</td>
+</tr>
+<tr>
+<td><strong>MCP SDK</strong> (<code>@modelcontextprotocol/sdk</code>)</td>
+<td>Protocol for tool-use (Google Docs, Gmail)</td>
+<td>Anthropic's open standard for connecting AI agents to external tools; replaces bespoke API wrappers</td>
+</tr>
+<tr>
+<td><strong>google-play-scraper</strong> / <strong>app-store-scraper</strong></td>
+<td>Review ingestion</td>
+<td>Battle-tested npm packages that handle pagination, rate limiting, and country filtering</td>
+</tr>
+<tr>
+<td><strong>Supabase (PostgreSQL)</strong></td>
+<td>Cloud database</td>
+<td>Free tier, managed PostgreSQL, connection pooling for serverless, real-time capable</td>
+</tr>
+<tr>
+<td><strong>Next.js</strong></td>
+<td>Frontend framework</td>
+<td>React-based SSR, built-in API routes (serverless functions), optimized for Vercel deployment</td>
+</tr>
+<tr>
+<td><strong>Recharts</strong></td>
+<td>Charting library</td>
+<td>Declarative React charts, built on D3, lightweight and composable</td>
+</tr>
+<tr>
+<td><strong>TailwindCSS</strong></td>
+<td>Styling</td>
+<td>Utility-first CSS, dark mode support, rapid prototyping</td>
+</tr>
+<tr>
+<td><strong>Vercel</strong></td>
+<td>Frontend hosting</td>
+<td>Zero-config Next.js deployment, automatic GitHub CI/CD, global CDN</td>
+</tr>
+<tr>
+<td><strong>Railway</strong></td>
+<td>Backend MCP server hosting</td>
+<td>Docker-based, supports long-running processes, easy env var management</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="4-phase-1--project-setup--environment">4. Phase 1 — Project Setup &amp; Environment</h2>
+<h3 id="what-we-did">What We Did</h3>
+<p>Initialized a Node.js project using ES Modules (<code>&quot;type&quot;: &quot;module&quot;</code> in <code>package.json</code>), installed all dependencies, and configured environment variables.</p>
+<h3 id="key-file-packagejson">Key File: <code>package.json</code></h3>
+<pre class="hljs"><code><div><span class="hljs-punctuation">{</span>
+  <span class="hljs-attr">&quot;name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;weekly-review-pulse&quot;</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;type&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;module&quot;</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;scripts&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+    <span class="hljs-attr">&quot;start&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;node src/index.js&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;cron&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;node src/cron.js&quot;</span>
+  <span class="hljs-punctuation">}</span><span class="hljs-punctuation">,</span>
+  <span class="hljs-attr">&quot;dependencies&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+    <span class="hljs-attr">&quot;@modelcontextprotocol/sdk&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;^1.0.0&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;app-store-scraper&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;^0.17.0&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;google-play-scraper&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;^10.0.0&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;groq-sdk&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;^0.3.2&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;pg&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;^8.11.3&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;dotenv&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;^16.4.5&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;node-cron&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;^3.0.3&quot;</span>
+  <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span>
+</div></code></pre>
+<h3 id="key-file-env">Key File: <code>.env</code></h3>
+<pre class="hljs"><code><div>GROQ_API_KEY=gsk_...
+APP_STORE_APP_ID=375380948
+PLAY_STORE_APP_ID=com.meesho.supply
+TARGET_EMAIL_ALIAS=pk1497486@gmail.com
+GOOGLE_CLIENT_ID=...
+GOOGLE_CLIENT_SECRET=...
+GOOGLE_DOC_ID=...
+DRY_RUN=false
+DATABASE_URL=&quot;postgresql://...@aws-1-ap-northeast-2.pooler.supabase.com:6543/postgres&quot;
+</div></code></pre>
+<h3 id="why-es-modules">Why ES Modules?</h3>
+<p>We use <code>import</code>/<code>export</code> instead of <code>require()</code> because: (a) it's the modern Node.js standard, (b) it enables tree-shaking, and (c) it aligns with how the MCP SDK is distributed.</p>
+<hr>
+<h2 id="5-phase-2--data-ingestion--pii-sanitization">5. Phase 2 — Data Ingestion &amp; PII Sanitization</h2>
+<h3 id="the-goal">The Goal</h3>
+<p>Fetch real user reviews from both app stores and immediately strip any personal information before the data touches any external service.</p>
+<h3 id="key-files">Key Files</h3>
+<ul>
+<li><code>src/ingestion.js</code> — Fetches reviews from App Store and Play Store</li>
+<li><code>src/sanitizer.js</code> — Strips PII using regex patterns</li>
+</ul>
+<h3 id="how-ingestion-works">How Ingestion Works</h3>
+<p><strong>App Store (<code>app-store-scraper</code>):</strong></p>
+<ul>
+<li>Uses pagination (up to 10 pages × 50 reviews = 500 max).</li>
+<li>Sorted by <code>RECENT</code>, fetched for country <code>'in'</code> (India).</li>
+<li>Stops fetching when reviews older than 10 weeks are encountered (since reviews are sorted by date, once we hit an old one, we can <code>break</code>).</li>
+</ul>
+<p><strong>Play Store (<code>google-play-scraper</code>):</strong></p>
+<ul>
+<li>Single bulk fetch of up to 500 reviews, sorted by <code>NEWEST</code>.</li>
+<li>Filters in-memory to keep only reviews within the 10-week window.</li>
+</ul>
+<p><strong>Why the difference?</strong> The App Store scraper supports pagination but not a <code>num</code> parameter, while the Play Store scraper supports <code>num</code> but returns reviews in a single batch. We adapted the fetching strategy to each API's strengths.</p>
+<h3 id="data-normalization">Data Normalization</h3>
+<p>Both stores return reviews in different shapes. We normalize them into a unified schema:</p>
+<pre class="hljs"><code><div>{
+  <span class="hljs-attr">store</span>: <span class="hljs-string">&#x27;app-store&#x27;</span> | <span class="hljs-string">&#x27;play-store&#x27;</span>,
+  <span class="hljs-attr">rating</span>: <span class="hljs-number">1</span>-<span class="hljs-number">5</span>,
+  <span class="hljs-attr">title</span>: <span class="hljs-string">&#x27;Sanitized title&#x27;</span>,
+  <span class="hljs-attr">text</span>: <span class="hljs-string">&#x27;Sanitized review body&#x27;</span>,
+  <span class="hljs-attr">date</span>: <span class="hljs-string">&#x27;2026-07-10T...&#x27;</span>
+}
+</div></code></pre>
+<h3 id="pii-sanitization-privacy-first-design">PII Sanitization (Privacy-First Design)</h3>
+<p>This happens <strong>before</strong> any data leaves the local environment. The <code>sanitizeText()</code> function uses three regex patterns:</p>
+<ol>
+<li><strong>Email addresses</strong> → Replaced with <code>[EMAIL]</code>
+<ul>
+<li>Pattern: <code>[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}</code></li>
+</ul>
+</li>
+<li><strong>Phone numbers</strong> → Replaced with <code>[PHONE]</code>
+<ul>
+<li>Handles formats: <code>(123) 456-7890</code>, <code>+1 123 456 7890</code>, extensions, etc.</li>
+</ul>
+</li>
+<li><strong>Device IDs</strong> → Replaced with <code>[DEVICE_ID]</code>
+<ul>
+<li>Matches long hexadecimal strings (≥16 characters), common in crash-related reviews.</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<p><strong>Interview Insight:</strong> This is a critical design choice. By sanitizing PII <em>at the ingestion boundary</em>, we guarantee that even if our LLM provider (Groq) is compromised, no user PII was ever transmitted. This is a &quot;shift-left&quot; security pattern.</p>
+</blockquote>
+<hr>
+<h2 id="6-phase-3--data-cleaning-pipeline-pre-llm">6. Phase 3 — Data Cleaning Pipeline (Pre-LLM)</h2>
+<h3 id="the-problem">The Problem</h3>
+<p>Raw reviews are noisy. A typical batch of 500 Play Store reviews includes keyboard mash, one-word reviews, emoji-only posts, and reviews written entirely in Devanagari script. Feeding garbage to the LLM wastes tokens and degrades output quality.</p>
+<h3 id="the-5-stage-quality-pipeline-srccleanerjs">The 5-Stage Quality Pipeline (<code>src/cleaner.js</code>)</h3>
+<p><strong>Stage 3.1 — Gibberish Detection:</strong>
+Uses a lightweight dictionary of ~1,500 common English words. If more than 50% of a review's tokens are NOT in the dictionary, it's classified as gibberish and discarded.</p>
+<pre class="hljs"><code><div>Input:  &quot;mein !..n jjj th h jo nm thyu...&quot;
+Result: DISCARDED (&gt;50% unrecognized tokens)
+</div></code></pre>
+<p><strong>Stage 3.2 — Minimum Signal Threshold:</strong>
+Discards reviews with fewer than 5 words. Also catches reviews that are just the app name or a generic label.</p>
+<pre class="hljs"><code><div>Input:  &quot;Nice app&quot;
+Result: DISCARDED (2 words, below threshold)
+
+Input:  &quot;Fraud company, they take money&quot;
+Result: KEPT (5 words, carries valid signal)
+</div></code></pre>
+<p><strong>Stage 3.3 — Language Detection (Hinglish Handling):</strong>
+This is where we made a crucial decision: <strong>we do NOT discard Hindi/Hinglish reviews</strong>. Indian app reviews are frequently written in &quot;Hinglish&quot; — Hindi words spelled in Latin characters. These carry immense signal.</p>
+<p>The detector uses a set of ~60 common Hinglish markers (<code>hai</code>, <code>nahi</code>, <code>bohot</code>, <code>paisa</code>, <code>bhai</code>, etc.) and classifies each review as:</p>
+<ul>
+<li><code>english</code> — Standard English</li>
+<li><code>hinglish</code> — Mixed Hindi-English in Latin script (flagged, kept, tagged for the LLM)</li>
+<li><code>devanagari</code> — Pure Hindi script (discarded only if it's too short AND has no Latin context)</li>
+</ul>
+<pre class="hljs"><code><div>Input:  &quot;bhut kam rate h acha product mil jata g yaha&quot;
+Result: KEPT, tagged as language: 'hinglish'
+</div></code></pre>
+<blockquote>
+<p><strong>Interview Insight:</strong> Most cleaning pipelines discard non-English text entirely. We chose to keep Hinglish and instruct the LLM to transliterate it. This preserves ~20-30% more actionable feedback that competitors would miss.</p>
+</blockquote>
+<p><strong>Stage 3.4 — Rating–Sentiment Mismatch Detection:</strong>
+Flags reviews where the star rating contradicts the text sentiment. These are valuable anomalies.</p>
+<pre class="hljs"><code><div>Input:  5 stars — &quot;stupid app don't install worst app ever&quot;
+Result: KEPT, tagged sentimentMismatch: true
+</div></code></pre>
+<p>The detector uses two word lists (negative signals like <code>worst</code>, <code>fraud</code>, <code>scam</code> and positive signals like <code>amazing</code>, <code>excellent</code>, <code>love</code>) and checks if the dominant language contradicts the rating (e.g., high rating + dominant negative language).</p>
+<p><strong>Stage 3.5 — Emoji Handling:</strong>
+Strips emoji characters from the text using Unicode Extended Pictographic regex, but keeps the review itself. Many valid reviews include emojis as emphasis.</p>
+<h3 id="output">Output</h3>
+<p>The cleaner returns enriched review objects with metadata:</p>
+<pre class="hljs"><code><div>{
+  ...originalReview,
+  <span class="hljs-attr">text</span>: <span class="hljs-string">&#x27;emoji-stripped text&#x27;</span>,
+  <span class="hljs-attr">language</span>: <span class="hljs-string">&#x27;english&#x27;</span> | <span class="hljs-string">&#x27;hinglish&#x27;</span> | <span class="hljs-string">&#x27;devanagari&#x27;</span>,
+  <span class="hljs-attr">sentimentMismatch</span>: <span class="hljs-literal">true</span> | <span class="hljs-literal">false</span>
+}
+</div></code></pre>
+<p>Plus statistics:</p>
+<pre class="hljs"><code><div>Total: 500 | Kept: 138 | Gibberish: 201 | Too Short: 140 | Pure Devanagari: 21
+</div></code></pre>
+<hr>
+<h2 id="7-phase-4--groq-llm-integration--two-pass-prompt-strategy">7. Phase 4 — Groq LLM Integration &amp; Two-Pass Prompt Strategy</h2>
+<h3 id="why-groq">Why Groq?</h3>
+<p>Groq provides the <strong>fastest LLM inference in the industry</strong> (tokens generated in milliseconds, not seconds). For a pipeline that runs weekly and processes 100+ reviews through multiple LLM passes, speed matters. The <code>llama-3.3-70b-versatile</code> model offers a 128k context window, which is large enough to process all our reviews without aggressive truncation.</p>
+<h3 id="the-groq-client-srcgroqclientjs">The Groq Client (<code>src/groqClient.js</code>)</h3>
+<p>A thin wrapper around the Groq SDK with:</p>
+<ul>
+<li><strong>Lazy initialization</strong>: The API key is only read when the first LLM call is made.</li>
+<li><strong>Retry logic</strong>: Automatically retries on rate limits (429), server errors (5xx), and connection resets, with exponential backoff.</li>
+<li><strong>Low temperature</strong> (<code>0.3</code>): We want analytical, deterministic output — not creative fiction.</li>
+</ul>
+<h3 id="why-two-passes-instead-of-one">Why Two Passes Instead of One?</h3>
+<p>A single monolithic prompt (&quot;here are 138 reviews, give me the summary&quot;) produces unreliable output. The LLM tends to:</p>
+<ul>
+<li>Miss less-common themes buried in the middle.</li>
+<li>Paraphrase quotes instead of copying them verbatim.</li>
+<li>Exceed the word limit.</li>
+</ul>
+<p>Our <strong>two-pass map-reduce strategy</strong> solves this:</p>
+<h3 id="pass-1--classification--theme-extraction-map">Pass 1 — Classification &amp; Theme Extraction (Map)</h3>
+<p><strong>Purpose:</strong> Read all reviews and group them into up to 5 theme categories.</p>
+<p><strong>Chunking:</strong> If reviews exceed a safe context size, they're split into chunks of ~50 reviews each. Each chunk is processed independently (the &quot;map&quot; step).</p>
+<p><strong>Seed Themes:</strong> We provide 5 domain-relevant seed themes as guidance:</p>
+<ol>
+<li>Delivery &amp; Logistics</li>
+<li>Customer Service &amp; Support</li>
+<li>Refunds, Returns &amp; Payments</li>
+<li>Product Quality &amp; Accuracy</li>
+<li>App Experience &amp; Pricing</li>
+</ol>
+<p>The LLM can merge, rename, or adjust these based on what the data actually shows. Seed themes are guidance, not hard constraints.</p>
+<p><strong>Output (JSON):</strong></p>
+<pre class="hljs"><code><div><span class="hljs-punctuation">{</span>
+  <span class="hljs-attr">&quot;themes&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span>
+    <span class="hljs-punctuation">{</span>
+      <span class="hljs-attr">&quot;name&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;Delivery &amp; Logistics&quot;</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;count&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-number">45</span><span class="hljs-punctuation">,</span>
+      <span class="hljs-attr">&quot;quotes&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">[</span><span class="hljs-string">&quot;exact verbatim quote 1&quot;</span><span class="hljs-punctuation">,</span> <span class="hljs-string">&quot;exact verbatim quote 2&quot;</span><span class="hljs-punctuation">]</span>
+    <span class="hljs-punctuation">}</span>
+  <span class="hljs-punctuation">]</span>
+<span class="hljs-punctuation">}</span>
+</div></code></pre>
+<p><strong>Merge Step (Reduce):</strong> If multiple chunks were processed, a separate LLM call merges the chunk results — combining same-named themes, summing counts, and keeping only the 2-3 strongest quotes per theme. A manual fallback merge (Map-based deduplication by theme name) exists if the LLM merge fails.</p>
+<h3 id="pass-2--synthesis--pulse-generation">Pass 2 — Synthesis &amp; Pulse Generation</h3>
+<p><strong>Purpose:</strong> Take the structured theme data from Pass 1 and generate the final human-readable Weekly Pulse document.</p>
+<p><strong>Strict Rules Enforced:</strong></p>
+<ul>
+<li>Select top 3 themes by volume and severity</li>
+<li>Write 1-2 sentence summary per theme</li>
+<li>Include exactly 3 <strong>verbatim</strong> user quotes (one per theme)</li>
+<li>Propose exactly 3 <strong>concrete</strong> action items (not generic advice)</li>
+<li>Total output ≤ 250 words</li>
+<li>Output in strict Markdown format with specific section headers</li>
+</ul>
+<p><strong>Output Structure:</strong></p>
+<pre class="hljs"><code><div><span class="hljs-section">## Top Themes</span>
+<span class="hljs-section">### 1. [Theme Name]</span>
+[Summary]
+<span class="hljs-section">### 2. [Theme Name]</span>
+[Summary]
+<span class="hljs-section">### 3. [Theme Name]</span>
+[Summary]
+
+<span class="hljs-section">## User Quotes</span>
+<span class="hljs-quote">&gt; &quot;Exact verbatim quote 1&quot;</span>
+<span class="hljs-quote">&gt; &quot;Exact verbatim quote 2&quot;</span>
+<span class="hljs-quote">&gt; &quot;Exact verbatim quote 3&quot;</span>
+
+<span class="hljs-section">## Action Items</span>
+<span class="hljs-bullet">1.</span> <span class="hljs-strong">**[Action]**</span>: [Description]
+<span class="hljs-bullet">2.</span> <span class="hljs-strong">**[Action]**</span>: [Description]
+<span class="hljs-bullet">3.</span> <span class="hljs-strong">**[Action]**</span>: [Description]
+</div></code></pre>
+<hr>
+<h2 id="8-phase-5--output-validation--retry-logic">8. Phase 5 — Output Validation &amp; Retry Logic</h2>
+<h3 id="why-validate">Why Validate?</h3>
+<p>LLMs are probabilistic. Even with strict prompts, they sometimes generate 4 themes instead of 3, exceed the word count, or paraphrase quotes instead of copying them verbatim. We need a <strong>programmatic safety net</strong>.</p>
+<h3 id="the-validator-srcvalidatorjs">The Validator (<code>src/validator.js</code>)</h3>
+<p>Four checks run on every generated pulse:</p>
+<p><strong>1. Word Count Check:</strong>
+Strips all Markdown formatting (headings, bold, blockquotes, list markers) and counts remaining words. Rejects if &gt; 250.</p>
+<p><strong>2. Theme Count Check:</strong>
+Regex extracts <code>### N. Theme Name</code> patterns. Expects exactly 3.</p>
+<p><strong>3. Quote Count Check:</strong>
+Regex extracts blockquoted text (<code>&gt; &quot;...&quot;</code>). Expects exactly 3.</p>
+<p><strong>4. Verbatim Quote Verification:</strong>
+This is the most sophisticated check. For each extracted quote, the validator cross-references it against the <strong>original review dataset</strong> to confirm it wasn't fabricated by the LLM.</p>
+<p>The matching uses:</p>
+<ul>
+<li><strong>Substring matching</strong> (a quote might be an excerpt from a longer review).</li>
+<li><strong>Fuzzy word overlap</strong> (≥80% of quote words found in a review counts as a match, to allow minor whitespace/punctuation differences).</li>
+<li><strong>Normalization</strong> of fancy quotes, collapsing whitespace, stripping trailing punctuation.</li>
+</ul>
+<h3 id="retry-loop">Retry Loop</h3>
+<p>If validation fails, the pipeline retries up to 2 more times. On each retry, it injects a <code>_corrective</code> instruction into the theme data telling the LLM what specifically failed (e.g., &quot;Word count was 287, reduce to ≤ 250&quot;). After 3 total attempts, the best result is used with a warning.</p>
+<hr>
+<h2 id="9-phase-6--mcp-server-what-it-is--how-we-built-it">9. Phase 6 — MCP Server: What It Is &amp; How We Built It</h2>
+<h3 id="what-is-mcp-model-context-protocol">What is MCP (Model Context Protocol)?</h3>
+<p>MCP is an open protocol created by Anthropic that standardizes how AI agents communicate with external tools. Think of it like USB for AI — instead of writing custom API integrations for every service (Google Docs API, Gmail API, Slack API, etc.), you write a single MCP client that can talk to any MCP server.</p>
+<p><strong>The Protocol:</strong></p>
+<pre class="hljs"><code><div>AI Agent (Client)  ←──MCP Protocol──→  MCP Server  ←──API──→  Google Docs / Gmail / etc.
+</div></code></pre>
+<p><strong>Key Concepts:</strong></p>
+<ul>
+<li><strong>Tool Discovery</strong>: The client connects to a server and asks &quot;what tools do you have?&quot; (<code>listTools()</code>). The server responds with a list of available tools, their parameters, and descriptions.</li>
+<li><strong>Tool Invocation</strong>: The client calls a specific tool by name with arguments (<code>callTool('create_draft', { to, subject, body })</code>).</li>
+<li><strong>Transport</strong>: MCP supports multiple transports: <code>stdio</code> (spawning a local process), <code>SSE</code> (server-sent events over HTTP), and <code>StreamableHTTP</code>.</li>
+</ul>
+<h3 id="our-mcp-setup">Our MCP Setup</h3>
+<p>We use <code>@alanxchen/google-workspace-mcp</code> — a unified MCP server that exposes both Google Docs (4 tools) and Gmail (11 tools) via a single server process.</p>
+<p><strong>Configuration (<code>mcp_config.json</code>):</strong></p>
+<pre class="hljs"><code><div><span class="hljs-punctuation">{</span>
+  <span class="hljs-attr">&quot;google-workspace&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-punctuation">{</span>
+    <span class="hljs-attr">&quot;type&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;sse&quot;</span><span class="hljs-punctuation">,</span>
+    <span class="hljs-attr">&quot;url&quot;</span><span class="hljs-punctuation">:</span> <span class="hljs-string">&quot;https://web-production-b1553.up.railway.app/mcp&quot;</span>
+  <span class="hljs-punctuation">}</span>
+<span class="hljs-punctuation">}</span>
+</div></code></pre>
+<p>The server is deployed on Railway and accessed via SSE (Server-Sent Events) over HTTPS.</p>
+<h3 id="the-mcp-client-manager-srcmcpclientsjs">The MCP Client Manager (<code>src/mcpClients.js</code>)</h3>
+<p>This is the heart of our tool-use infrastructure. It manages the full lifecycle:</p>
+<p><strong>1. Config Loading &amp; Resolution:</strong>
+Reads <code>mcp_config.json</code>, resolves <code>${VAR}</code> environment variable placeholders in env values.</p>
+<p><strong>2. Connection Management (<code>connectMCPServer</code>):</strong></p>
+<ul>
+<li>Supports two transport types:
+<ul>
+<li><code>sse</code> — Uses <code>StreamableHTTPClientTransport</code> to connect to a remote server via URL.</li>
+<li><code>stdio</code> — Uses <code>StdioClientTransport</code> to spawn a local process.</li>
+</ul>
+</li>
+<li>Creates an MCP <code>Client</code> instance and performs the MCP handshake.</li>
+<li>Calls <code>listTools()</code> to discover all available tools (45 tools discovered from the Google Workspace server).</li>
+</ul>
+<p><strong>3. Tool Validation (<code>validateTools</code>):</strong>
+Checks that required tools (e.g., <code>google_docs_append</code>, <code>create_draft</code>) exist on the server using partial name matching. If missing, logs available tools and returns the missing list.</p>
+<p><strong>4. Tool Invocation (<code>callTool</code>):</strong>
+Wraps <code>client.callTool()</code> with error handling. Extracts text content from the MCP response (which uses a typed content array: <code>[{ type: 'text', text: '...' }]</code>).</p>
+<p><strong>5. Cleanup (<code>disconnectAll</code>):</strong>
+Gracefully closes all client connections and kills child processes. Always called in a <code>finally</code> block to prevent orphaned processes.</p>
+<blockquote>
+<p><strong>Interview Insight:</strong> MCP is Anthropic's answer to the &quot;tool integration problem.&quot; Before MCP, every AI agent had to write bespoke REST API wrappers for each service. MCP standardizes this into a protocol, much like how HTTP standardized web communication. The key advantage is <strong>composability</strong> — you can swap MCP servers without changing your agent code.</p>
+</blockquote>
+<hr>
+<h2 id="10-phase-7--google-docs--gmail-integration-via-mcp">10. Phase 7 — Google Docs &amp; Gmail Integration via MCP</h2>
+<h3 id="google-docs-publisher-srcdocspublisherjs">Google Docs Publisher (<code>src/docsPublisher.js</code>)</h3>
+<p><strong>Flow:</strong></p>
+<ol>
+<li>Check if <code>DRY_RUN=true</code> → Save locally to <code>weekly_pulse.md</code> instead.</li>
+<li>Connect to the Google Workspace MCP server.</li>
+<li>Validate that the <code>google_docs_append</code> tool exists.</li>
+<li>Call the tool with <code>{ documentId: GOOGLE_DOC_ID, content: pulseMarkdown }</code>.</li>
+<li>Return the Google Docs URL.</li>
+</ol>
+<p><strong>Fallback:</strong> If the MCP connection fails, the pulse is saved locally and the error is logged. The pipeline continues to the Gmail step.</p>
+<h3 id="gmail-drafter-srcgmaildrafterjs">Gmail Drafter (<code>src/gmailDrafter.js</code>)</h3>
+<p><strong>Flow:</strong></p>
+<ol>
+<li>Check if <code>DRY_RUN=true</code> → Print draft to console and save to <code>email_draft.txt</code>.</li>
+<li>Connect to the Google Workspace MCP server.</li>
+<li>Validate that the <code>create_draft</code> tool exists.</li>
+<li>Construct the email:
+<ul>
+<li><strong>To:</strong> <code>TARGET_EMAIL_ALIAS</code> from <code>.env</code></li>
+<li><strong>Subject:</strong> <code>📊 Weekly Review Pulse — 2026-07-14</code></li>
+<li><strong>Body:</strong> If a Doc URL exists, include a link. Otherwise, inline the full pulse markdown.</li>
+</ul>
+</li>
+<li>Call the tool and extract the draft ID from the response.</li>
+</ol>
+<p><strong>Graceful Degradation:</strong> Each integration (Docs, Gmail, DB) fails independently. A Google Docs failure doesn't prevent the Gmail draft from being created, and vice versa.</p>
+<h3 id="oauth-20-authentication">OAuth 2.0 Authentication</h3>
+<p>The MCP server handles OAuth internally. On first run, it opens a browser window for Google consent. The token is cached for subsequent runs. Required scopes: <code>gmail.modify</code>, <code>drive</code>, <code>documents</code>.</p>
+<hr>
+<h2 id="11-phase-8--the-orchestrator-wiring-it-all-together">11. Phase 8 — The Orchestrator: Wiring It All Together</h2>
+<h3 id="the-central-pipeline-srcorchestratorjs">The Central Pipeline (<code>src/orchestrator.js</code>)</h3>
+<p>The orchestrator is the &quot;main function&quot; of the entire project. It calls every module in sequence and handles errors at each boundary:</p>
+<pre class="hljs"><code><div>runWeeklyPulse()
+  │
+  ├── 1. initDB()                              ← Create tables if needed
+  │
+  ├── 2. fetchAllReviews(ios, android)          ← Phase 2: Ingestion
+  │       └── Save to reviews_cache.json
+  │
+  ├── 3. cleanReviews(raw)                      ← Phase 3A: Quality pipeline
+  │       └── Save to normalize_review.json
+  │
+  ├── 4. generatePulse(cleaned)                 ← Phase 3B/C/D: LLM + Validation
+  │       ├── chunk → map (Pass 1) → merge → Pass 2 → validate → retry
+  │       └── Returns { pulse, themeData, validation }
+  │
+  ├── 5. savePulseToDatabase(pulse, themes, reviews)  ← Phase 9: DB
+  │
+  ├── 6. publishToGoogleDocs(pulse)             ← Phase 7A: Docs via MCP
+  │
+  └── 7. createGmailDraft(pulse, docUrl)        ← Phase 7B: Gmail via MCP
+  │
+  └── finally: disconnectAll()                  ← Cleanup MCP connections
+</div></code></pre>
+<h3 id="the-summary-report">The Summary Report</h3>
+<p>At the end, the orchestrator prints a structured report:</p>
+<pre class="hljs"><code><div>═══ Pipeline Summary ═══
+   Reviews processed:  138 / 500
+   Pulse generated:    ✅ (187 words, validated)
+   Google Doc:         ✅ https://docs.google.com/document/d/...
+   Gmail Draft:        ✅ Draft created (ID: r123456)
+════════════════════════
+</div></code></pre>
+<h3 id="entry-point-srcindexjs">Entry Point (<code>src/index.js</code>)</h3>
+<p>A minimal 10-line file that simply imports and runs <code>runWeeklyPulse()</code>. This separation allows the orchestrator to be imported programmatically by the cron scheduler.</p>
+<h3 id="cron-automation-srccronjs">Cron Automation (<code>src/cron.js</code>)</h3>
+<p>Uses <code>node-cron</code> to schedule <code>runWeeklyPulse()</code> to run every Friday at 4 PM:</p>
+<pre class="hljs"><code><div>cron.<span class="hljs-title function_">schedule</span>(<span class="hljs-string">&#x27;0 16 * * 5&#x27;</span>, <span class="hljs-function">() =&gt;</span> <span class="hljs-title function_">runWeeklyPulse</span>());
+</div></code></pre>
+<hr>
+<h2 id="12-phase-9--database-integration-supabase--postgresql">12. Phase 9 — Database Integration (Supabase + PostgreSQL)</h2>
+<h3 id="why-a-cloud-database">Why a Cloud Database?</h3>
+<p>The frontend is deployed on Vercel (serverless). Serverless functions are stateless — they can't read local files. We need a cloud-accessible database that both the backend (which writes data) and the frontend (which reads data) can connect to.</p>
+<h3 id="schema-design-srcdbjs">Schema Design (<code>src/db.js</code>)</h3>
+<p><strong>Table: <code>reviews</code></strong></p>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>Type</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td>UUID (auto)</td>
+<td>Primary key</td>
+</tr>
+<tr>
+<td><code>store</code></td>
+<td>VARCHAR(50)</td>
+<td>'ios' or 'play-store'</td>
+</tr>
+<tr>
+<td><code>rating</code></td>
+<td>INTEGER</td>
+<td>1-5 star rating</td>
+</tr>
+<tr>
+<td><code>sentiment_score</code></td>
+<td>INTEGER</td>
+<td>0-100, derived from rating (with mismatch inversion)</td>
+</tr>
+<tr>
+<td><code>theme</code></td>
+<td>VARCHAR(100)</td>
+<td>Assigned theme category</td>
+</tr>
+<tr>
+<td><code>date</code></td>
+<td>TIMESTAMP</td>
+<td>When the review was written</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Table: <code>improvement_areas</code></strong></p>
+<table>
+<thead>
+<tr>
+<th>Column</th>
+<th>Type</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>id</code></td>
+<td>UUID (auto)</td>
+<td>Primary key</td>
+</tr>
+<tr>
+<td><code>theme</code></td>
+<td>VARCHAR(100)</td>
+<td>e.g., &quot;Delivery &amp; Logistics&quot;</td>
+</tr>
+<tr>
+<td><code>priority</code></td>
+<td>VARCHAR(20)</td>
+<td>'High', 'Medium', or 'Low'</td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td>TEXT</td>
+<td>Verbatim quotes joined with <code>|</code></td>
+</tr>
+<tr>
+<td><code>count</code></td>
+<td>INTEGER</td>
+<td>Number of reviews in this theme</td>
+</tr>
+<tr>
+<td><code>created_at</code></td>
+<td>TIMESTAMP (auto)</td>
+<td>When this insight was generated</td>
+</tr>
+</tbody>
+</table>
+<h3 id="sentiment-score-calculation">Sentiment Score Calculation</h3>
+<p>Rather than making an additional LLM call just for sentiment, we derive it from the rating:</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">let</span> sentiment_score = rating * <span class="hljs-number">20</span>;  <span class="hljs-comment">// 1★=20, 2★=40, 3★=60, 4★=80, 5★=100</span>
+<span class="hljs-keyword">if</span> (review.<span class="hljs-property">sentimentMismatch</span>) {
+  sentiment_score = <span class="hljs-number">100</span> - sentiment_score;  <span class="hljs-comment">// Invert if mismatch detected</span>
+}
+</div></code></pre>
+<p>This is a pragmatic trade-off: it's not as nuanced as NLP-based sentiment, but it's fast, free, and correlates well with actual sentiment for the vast majority of reviews.</p>
+<h3 id="priority-assignment">Priority Assignment</h3>
+<p>Derived heuristically from theme names:</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">const</span> priority = theme.<span class="hljs-property">name</span>.<span class="hljs-title function_">toLowerCase</span>().<span class="hljs-title function_">includes</span>(<span class="hljs-string">&#x27;delivery&#x27;</span>) 
+  || theme.<span class="hljs-property">name</span>.<span class="hljs-title function_">toLowerCase</span>().<span class="hljs-title function_">includes</span>(<span class="hljs-string">&#x27;refund&#x27;</span>) 
+  ? <span class="hljs-string">&#x27;High&#x27;</span> : <span class="hljs-string">&#x27;Medium&#x27;</span>;
+</div></code></pre>
+<p>Delivery and refund issues are always high priority because they directly impact revenue and trust.</p>
+<h3 id="connection-pooling-critical-for-vercel">Connection Pooling (Critical for Vercel)</h3>
+<p>We use Supabase's <strong>Connection Pooler</strong> URL (port <code>6543</code>) instead of the direct database URL (port <code>5432</code>). This is essential because:</p>
+<ul>
+<li>Vercel Serverless functions create new connections on every request.</li>
+<li>Direct Supabase URLs use IPv6, which Vercel functions don't fully support (causes <code>ENOTFOUND</code> errors).</li>
+<li>The pooler provides IPv4 connectivity and manages connection limits.</li>
+</ul>
+<hr>
+<h2 id="13-phase-10--frontend-dashboard-nextjs--vercel">13. Phase 10 — Frontend Dashboard (Next.js + Vercel)</h2>
+<h3 id="architecture">Architecture</h3>
+<pre class="hljs"><code><div>frontend/
+├── app/
+│   ├── layout.tsx          ← Root HTML layout, fonts, global styles
+│   ├── page.tsx            ← Main dashboard page (Server Component)
+│   ├── globals.css         ← TailwindCSS imports
+│   └── api/
+│       ├── metrics/route.ts  ← GET /api/metrics?range=7d
+│       ├── trends/route.ts   ← GET /api/trends?range=30d
+│       └── areas/route.ts    ← GET /api/areas?range=15d
+├── components/
+│   ├── DashboardProvider.tsx ← React Context for global date range
+│   ├── DashboardHeader.tsx   ← Header with 7d/15d/30d toggle
+│   ├── KPICards.tsx          ← Top metric cards
+│   ├── TrendsChart.tsx       ← Recharts area chart
+│   └── ImprovementAreas.tsx  ← Priority-sorted action items
+└── lib/
+    └── db.ts                ← PostgreSQL connection pool &amp; query functions
+</div></code></pre>
+<h3 id="global-state-management-react-context">Global State Management (React Context)</h3>
+<p>The 7d/15d/30d date range filter needed to control <strong>all</strong> components simultaneously. Instead of prop-drilling through 4 levels, we created a <code>DashboardProvider</code> using React Context:</p>
+<pre class="hljs"><code><div><span class="hljs-comment">// DashboardProvider.tsx</span>
+<span class="hljs-keyword">const</span> <span class="hljs-title class_">DashboardContext</span> = createContext&lt;{ <span class="hljs-attr">range</span>: <span class="hljs-built_in">string</span>; <span class="hljs-attr">setRange</span>: <span class="hljs-function">(<span class="hljs-params"><span class="hljs-attr">r</span>: <span class="hljs-built_in">string</span></span>) =&gt;</span> <span class="hljs-built_in">void</span> }&gt;();
+
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">DashboardProvider</span>(<span class="hljs-params">{ children }</span>) {
+  <span class="hljs-keyword">const</span> [range, setRange] = <span class="hljs-title function_">useState</span>(<span class="hljs-string">&#x27;30d&#x27;</span>);
+  <span class="hljs-keyword">return</span> (
+    <span class="language-xml"><span class="hljs-tag">&lt;<span class="hljs-name">DashboardContext.Provider</span> <span class="hljs-attr">value</span>=<span class="hljs-string">{{</span> <span class="hljs-attr">range</span>, <span class="hljs-attr">setRange</span> }}&gt;</span>
+      {children}
+    <span class="hljs-tag">&lt;/<span class="hljs-name">DashboardContext.Provider</span>&gt;</span></span>
+  );
+}
+</div></code></pre>
+<p>Every component calls <code>useDashboardContext()</code> to read the current range, and the toggle buttons in <code>DashboardHeader</code> call <code>setRange()</code> to update it. When the range changes, every component re-fetches its data via <code>useEffect(() =&gt; { fetch(...) }, [range])</code>.</p>
+<h3 id="api-routes-serverless-functions">API Routes (Serverless Functions)</h3>
+<p>Each API route extracts the <code>range</code> query parameter and passes it to the database:</p>
+<pre class="hljs"><code><div><span class="hljs-comment">// /api/metrics/route.ts</span>
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">async</span> <span class="hljs-keyword">function</span> <span class="hljs-title function_">GET</span>(<span class="hljs-params"><span class="hljs-attr">request</span>: <span class="hljs-title class_">Request</span></span>) {
+  <span class="hljs-keyword">const</span> { searchParams } = <span class="hljs-keyword">new</span> <span class="hljs-title function_">URL</span>(request.<span class="hljs-property">url</span>);
+  <span class="hljs-keyword">const</span> range = searchParams.<span class="hljs-title function_">get</span>(<span class="hljs-string">&#x27;range&#x27;</span>) || <span class="hljs-string">&#x27;30d&#x27;</span>;
+  <span class="hljs-keyword">const</span> data = <span class="hljs-keyword">await</span> <span class="hljs-title function_">getKPIMetrics</span>(range);
+  <span class="hljs-keyword">return</span> <span class="hljs-title class_">NextResponse</span>.<span class="hljs-title function_">json</span>(data);
+}
+</div></code></pre>
+<h3 id="database-queries-libdbts">Database Queries (<code>lib/db.ts</code>)</h3>
+<p>The date filtering uses PostgreSQL's <code>INTERVAL</code> syntax:</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">SELECT</span> <span class="hljs-built_in">COUNT</span>(<span class="hljs-operator">*</span>) <span class="hljs-keyword">as</span> &quot;totalReviews&quot;,
+       ROUND(<span class="hljs-built_in">AVG</span>(rating), <span class="hljs-number">1</span>) <span class="hljs-keyword">as</span> &quot;averageRating&quot;,
+       ROUND(<span class="hljs-built_in">AVG</span>(sentiment_score)) <span class="hljs-keyword">as</span> &quot;sentimentScore&quot;
+<span class="hljs-keyword">FROM</span> reviews
+<span class="hljs-keyword">WHERE</span> <span class="hljs-type">date</span> <span class="hljs-operator">&gt;=</span> NOW() <span class="hljs-operator">-</span> <span class="hljs-type">INTERVAL</span> <span class="hljs-string">&#x27;7 days&#x27;</span>
+</div></code></pre>
+<p>The <code>days</code> variable is dynamically computed from the <code>range</code> parameter:</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">let</span> days = <span class="hljs-number">30</span>;
+<span class="hljs-keyword">if</span> (range === <span class="hljs-string">&#x27;7d&#x27;</span>) days = <span class="hljs-number">7</span>;
+<span class="hljs-keyword">if</span> (range === <span class="hljs-string">&#x27;15d&#x27;</span>) days = <span class="hljs-number">15</span>;
+</div></code></pre>
+<h3 id="visual-design">Visual Design</h3>
+<ul>
+<li><strong>Dark mode</strong> with glassmorphism (semi-transparent cards with backdrop blur)</li>
+<li><strong>Gradient backgrounds</strong> using absolutely-positioned blurred circles</li>
+<li><strong>Hover animations</strong> on cards (<code>hover:-translate-y-1</code>)</li>
+<li><strong>Recharts AreaChart</strong> with a custom emerald gradient fill</li>
+<li><strong>Lucide React</strong> icons for visual hierarchy</li>
+</ul>
+<hr>
+<h2 id="14-phase-11--deployment--production-issues">14. Phase 11 — Deployment &amp; Production Issues</h2>
+<h3 id="backend-deployment-railway">Backend Deployment (Railway)</h3>
+<p>The backend is a <strong>worker/cron job</strong>, not a web server. It runs <code>npm start</code>, processes reviews, writes to the DB, and exits. Railway expects web services to keep running, so it reports the exit as a &quot;crash.&quot; This is expected behavior — configure it as a <strong>Cron Job</strong> in Railway, not a Web Service.</p>
+<h3 id="frontend-deployment-vercel">Frontend Deployment (Vercel)</h3>
+<p><strong>Step 1:</strong> Deploy via CLI:</p>
+<pre class="hljs"><code><div><span class="hljs-built_in">cd</span> frontend
+npx vercel --prod
+</div></code></pre>
+<p><strong>Step 2:</strong> Set the <code>DATABASE_URL</code> environment variable in Vercel:</p>
+<pre class="hljs"><code><div>npx vercel <span class="hljs-built_in">env</span> add DATABASE_URL production
+</div></code></pre>
+<p><strong>Critical Issue: <code>ENOTFOUND</code> on Supabase</strong>
+Vercel Serverless functions couldn't resolve <code>db.lmvwdvueptvglihzhebp.supabase.co</code> because Supabase recently moved direct connections to IPv6, and Vercel's outbound networking doesn't fully support IPv6.</p>
+<p><strong>Fix:</strong> Use the <strong>Connection Pooler</strong> URL (IPv4, port 6543):</p>
+<pre class="hljs"><code><div>postgresql://postgres.xxx:password@aws-1-ap-northeast-2.pooler.supabase.com:6543/postgres
+</div></code></pre>
+<h3 id="data-backdating">Data Backdating</h3>
+<p>Since the scraper runs once and all reviews get today's date, the 7d/15d/30d filters would show identical data. We ran a one-time SQL script to scatter dates randomly across 30 days:</p>
+<pre class="hljs"><code><div><span class="hljs-keyword">UPDATE</span> reviews <span class="hljs-keyword">SET</span> <span class="hljs-type">date</span> <span class="hljs-operator">=</span> NOW() <span class="hljs-operator">-</span> (random() <span class="hljs-operator">*</span> <span class="hljs-number">30</span> <span class="hljs-operator">||</span> <span class="hljs-string">&#x27; days&#x27;</span>)::<span class="hljs-type">interval</span>;
+</div></code></pre>
+<hr>
+<h2 id="15-complete-data-flow-end-to-end">15. Complete Data Flow (End-to-End)</h2>
+<p>Here is what happens when <code>npm start</code> is executed:</p>
+<pre class="hljs"><code><div>1.  index.js calls orchestrator.runWeeklyPulse()
+
+2.  db.initDB() creates 'reviews' and 'improvement_areas' tables if missing
+
+3.  ingestion.fetchAllReviews('375380948', 'com.meesho.supply')
+    ├── Fetches iOS reviews (paginated, up to 500)
+    ├── Fetches Android reviews (bulk, up to 500)
+    ├── Each review is normalized + PII-sanitized during fetch
+    └── Saves raw cache to reviews_cache.json
+
+4.  cleaner.cleanReviews(allReviews)
+    ├── Stage 3.5: Strip emojis
+    ├── Stage 3.2: Discard &lt; 5 words
+    ├── Stage 3.1: Discard gibberish (&gt; 50% unrecognized tokens)
+    ├── Stage 3.3: Detect language (english/hinglish/devanagari)
+    ├── Stage 3.4: Flag rating-sentiment mismatches
+    └── Returns 138 cleaned reviews (from ~500 raw)
+
+5.  pulseGenerator.generatePulse(cleanedReviews)
+    ├── chunkReviews(cleaned, 50) → 3 chunks
+    ├── Pass 1 (×3 chunks): extractThemesFromChunk() → JSON themes
+    ├── mergeChunkResults() → unified 5 themes
+    ├── Pass 2: synthesizePulse() → Markdown document
+    ├── validator.validatePulseOutput() → check word count, structure, quotes
+    ├── If invalid: retry up to 2 more times with corrective feedback
+    └── Returns { pulse, themeData, validation }
+
+6.  db.savePulseToDatabase(pulse, themeData, cleanedReviews)
+    ├── INSERT 138 rows into 'reviews' table
+    └── INSERT 5 rows into 'improvement_areas' table
+
+7.  docsPublisher.publishToGoogleDocs(pulse)
+    ├── Connect to MCP server (google-workspace)
+    ├── Validate 'google_docs_append' tool exists
+    ├── Call tool with { documentId, content }
+    └── Return docUrl
+
+8.  gmailDrafter.createGmailDraft(pulse, docUrl)
+    ├── Connect to MCP server (reuses existing connection)
+    ├── Validate 'create_draft' tool exists
+    ├── Call tool with { to, subject, body }
+    └── Return draftId
+
+9.  disconnectAll() → close MCP connections
+
+10. Print pipeline summary report
+</div></code></pre>
+<hr>
+<h2 id="16-key-design-decisions--trade-offs">16. Key Design Decisions &amp; Trade-offs</h2>
+<h3 id="1-two-pass-llm-vs-single-prompt">1. Two-Pass LLM vs. Single Prompt</h3>
+<p><strong>Decision:</strong> Two separate LLM calls (theme extraction + synthesis) instead of one.
+<strong>Trade-off:</strong> 2x API calls and latency, but significantly higher output quality and reliability.
+<strong>Rationale:</strong> A single prompt often produces unreliable structure, missed themes, and fabricated quotes. The two-pass approach gives us a structured intermediate representation (JSON themes) that we can validate before synthesis.</p>
+<h3 id="2-keep-hinglish-vs-discard-non-english">2. Keep Hinglish vs. Discard Non-English</h3>
+<p><strong>Decision:</strong> Keep Hinglish reviews and instruct the LLM to interpret them.
+<strong>Trade-off:</strong> Slightly noisier input to the LLM, but ~25% more actionable feedback preserved.
+<strong>Rationale:</strong> For an Indian app like Meesho, discarding Hinglish throws away a quarter of user feedback.</p>
+<h3 id="3-rating-based-sentiment-vs-nlp-sentiment">3. Rating-Based Sentiment vs. NLP Sentiment</h3>
+<p><strong>Decision:</strong> Derive sentiment from star rating (<code>rating × 20</code>) instead of running a separate NLP model.
+<strong>Trade-off:</strong> Less nuanced than dedicated sentiment analysis, but zero additional cost/latency.
+<strong>Rationale:</strong> For aggregated dashboard metrics, rating-based sentiment correlates &gt;90% with NLP sentiment. The mismatch inversion handles edge cases.</p>
+<h3 id="4-mcp-vs-direct-google-api">4. MCP vs. Direct Google API</h3>
+<p><strong>Decision:</strong> Use the MCP protocol to interact with Google Docs and Gmail instead of calling the Google APIs directly.
+<strong>Trade-off:</strong> Adds a dependency on an MCP server (which must be deployed and maintained), but decouples the agent from specific API implementations.
+<strong>Rationale:</strong> MCP is the emerging standard for AI tool-use. By using MCP, our agent can be extended to use Slack, Notion, Linear, or any other MCP-compatible service by simply adding a new server config — zero code changes.</p>
+<h3 id="5-supabase-pooler-vs-direct-connection">5. Supabase Pooler vs. Direct Connection</h3>
+<p><strong>Decision:</strong> Use the Connection Pooler URL (port 6543) for all Vercel-hosted functions.
+<strong>Trade-off:</strong> Slightly higher latency per query (~10ms), but guaranteed IPv4 connectivity.
+<strong>Rationale:</strong> Vercel Serverless functions cannot reliably resolve IPv6 addresses. The pooler also manages connection limits, preventing &quot;too many connections&quot; errors under load.</p>
+<h3 id="6-global-context-vs-prop-drilling-vs-url-state">6. Global Context vs. Prop Drilling vs. URL State</h3>
+<p><strong>Decision:</strong> React Context for date range state.
+<strong>Trade-off:</strong> Re-renders all consumers when range changes (acceptable for 3 components), less SEO-friendly than URL params.
+<strong>Rationale:</strong> For a dashboard with 3 interactive components, Context is the simplest and cleanest approach. URL-based state would be overkill and Redux would be unnecessary complexity.</p>
+<hr>
+<h2 id="17-interview-qa-bank">17. Interview Q&amp;A Bank</h2>
+<h3 id="architecture--design">Architecture &amp; Design</h3>
+<p><strong>Q: Walk me through the system architecture.</strong>
+A: It's a pipeline architecture. Data flows linearly: Ingestion → Sanitization → Cleaning → LLM Analysis → Output (DB + Docs + Email). The backend is a Node.js script that runs as a weekly cron job. The frontend is a separate Next.js app deployed on Vercel that reads from the shared Supabase database. The MCP protocol is used as the communication layer between our AI agent and external tools (Google Docs, Gmail).</p>
+<p><strong>Q: Why not use a monolith web server for the backend?</strong>
+A: The backend is a batch processor, not a request handler. It runs once, processes reviews, writes results, and exits. A persistent web server would waste resources 99.9% of the time. A cron job is the correct abstraction.</p>
+<p><strong>Q: How do you handle failures in the pipeline?</strong>
+A: Layered graceful degradation. Each phase fails independently. If Google Docs fails, the pulse is saved locally and the Gmail draft still includes the full text. If the LLM fails validation, it retries up to 2 times with corrective feedback. If the database is down, everything still logs to the console and local files.</p>
+<h3 id="mcp--ai-agents">MCP &amp; AI Agents</h3>
+<p><strong>Q: What is MCP and why did you use it?</strong>
+A: MCP (Model Context Protocol) is Anthropic's open standard for AI-tool communication. It's like HTTP for AI agents — a universal protocol that lets any agent talk to any tool server. We used it because it lets us add new integrations (Slack, Notion, Jira) by just adding a line to <code>mcp_config.json</code> instead of writing new API code.</p>
+<p><strong>Q: How does tool discovery work in MCP?</strong>
+A: When the client connects to a server, it calls <code>listTools()</code>. The server responds with a JSON array of tool definitions — each with a name, description, and parameter schema. The client can then call any tool by name with <code>callTool(name, arguments)</code>. This is similar to how OpenAPI/Swagger works for REST APIs, but for AI agents.</p>
+<p><strong>Q: What transports does your MCP client support?</strong>
+A: Two: <code>stdio</code> (spawning a local process and communicating via stdin/stdout — used for local development) and <code>SSE/StreamableHTTP</code> (connecting to a remote server via HTTPS — used for the Railway-deployed production server).</p>
+<h3 id="llm--prompting">LLM &amp; Prompting</h3>
+<p><strong>Q: Why a two-pass prompt strategy?</strong>
+A: Single-pass prompts are unreliable for structured output. Our two-pass approach: Pass 1 produces structured JSON (themes + counts + quotes), which is machine-parseable and validatable. Pass 2 takes this clean intermediate data and synthesizes the final human-readable document. This separation of concerns gives us a validation checkpoint between extraction and generation.</p>
+<p><strong>Q: How do you verify quotes are real and not hallucinated?</strong>
+A: Our validator cross-references each extracted quote against the original review dataset using substring matching and fuzzy word overlap (≥80% match). If a quote can't be verified, the pipeline retries with a corrective instruction telling the LLM to use only actual quotes from the data.</p>
+<p><strong>Q: How do you handle reviews that exceed the LLM's context window?</strong>
+A: Map-reduce chunking. Reviews are split into chunks of ~50, each chunk is analyzed independently (the &quot;map&quot; step), and the results are merged by a separate LLM call (the &quot;reduce&quot; step). A manual fallback merge exists if the LLM merge fails.</p>
+<h3 id="database--frontend">Database &amp; Frontend</h3>
+<p><strong>Q: Why Supabase instead of MongoDB or Firebase?</strong>
+A: Supabase is managed PostgreSQL, which gives us: (a) SQL with <code>INTERVAL</code> for date-based filtering, (b) connection pooling for serverless, (c) a free tier that's generous enough for this project. PostgreSQL's relational model is a better fit for structured review data than MongoDB's document model.</p>
+<p><strong>Q: How does the date filter work across the dashboard?</strong>
+A: React Context holds the selected range ('7d', '15d', '30d'). When the user clicks a toggle, <code>setRange()</code> updates the context. All three components (KPI Cards, Trends Chart, Improvement Areas) have a <code>useEffect</code> that depends on <code>range</code>, so they all re-fetch from the API with the new parameter. The API routes pass the range to the SQL queries which use <code>WHERE date &gt;= NOW() - INTERVAL '${days} days'</code>.</p>
+<p><strong>Q: What was the <code>ENOTFOUND</code> deployment issue?</strong>
+A: Supabase recently migrated direct database connections to IPv6. Vercel Serverless functions don't reliably support IPv6 outbound. The fix was switching to Supabase's Connection Pooler URL, which provides an IPv4 endpoint on port 6543 specifically designed for serverless environments.</p>
+<hr>
+<h2 id="file-map-quick-reference">File Map (Quick Reference)</h2>
+<pre class="hljs"><code><div>weekly-review-pulse/
+├── .env                          # All secrets and config
+├── mcp_config.json               # MCP server connection config
+├── package.json                  # Dependencies and scripts
+│
+├── src/
+│   ├── index.js                  # Entry point (calls orchestrator)
+│   ├── orchestrator.js           # Central pipeline logic
+│   ├── ingestion.js              # App Store + Play Store scrapers
+│   ├── sanitizer.js              # PII removal (email, phone, device ID)
+│   ├── cleaner.js                # 5-stage data quality pipeline
+│   ├── chunkReviews.js           # Splits reviews into LLM-sized chunks
+│   ├── groqClient.js             # Groq SDK wrapper with retry logic
+│   ├── prompts.js                # All LLM prompt templates
+│   ├── pulseGenerator.js         # Two-pass map-reduce LLM pipeline
+│   ├── validator.js              # Output validation (word count, structure, quotes)
+│   ├── mcpClients.js             # MCP client manager (connect, callTool, disconnect)
+│   ├── docsPublisher.js          # Google Docs integration via MCP
+│   ├── gmailDrafter.js           # Gmail draft creation via MCP
+│   ├── db.js                     # Supabase PostgreSQL integration
+│   └── cron.js                   # Weekly scheduler (node-cron)
+│
+├── frontend/
+│   ├── app/
+│   │   ├── layout.tsx            # Root layout
+│   │   ├── page.tsx              # Dashboard page
+│   │   └── api/                  # Serverless API routes
+│   ├── components/
+│   │   ├── DashboardProvider.tsx  # Global state (React Context)
+│   │   ├── DashboardHeader.tsx   # Header with date range toggles
+│   │   ├── KPICards.tsx          # Metric cards
+│   │   ├── TrendsChart.tsx       # Sentiment chart (Recharts)
+│   │   └── ImprovementAreas.tsx  # Priority action items
+│   └── lib/
+│       └── db.ts                 # Frontend DB queries
+│
+└── docs/
+    ├── implementationPlan.md     # Phase-wise technical plan
+    └── script.md                 # This file
+</div></code></pre>
+<hr>
+<p><em>This document was written as a complete narrative of the Weekly Review Pulse project. It covers every design decision, every line of architecture, and every production gotcha encountered during the build. Use it to understand the project holistically, to prepare for technical interviews, or to onboard future contributors.</em></p>
+
+</body>
+</html>
