@@ -5,9 +5,7 @@ import 'dotenv/config';
 // Initialize connection pool
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: process.env.DATABASE_URL && process.env.DATABASE_URL.includes('railway') 
-    ? { rejectUnauthorized: false } 
-    : false
+  ssl: { rejectUnauthorized: false }
 });
 
 /**
@@ -20,21 +18,22 @@ export async function initDB() {
   }
 
   const query = `
-    CREATE TABLE IF NOT EXISTS pulse_metrics (
-      id SERIAL PRIMARY KEY,
-      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-      total_reviews INT NOT NULL,
-      overall_sentiment VARCHAR(50) NOT NULL,
-      average_rating NUMERIC(3, 2),
-      word_count INT,
-      raw_pulse_markdown TEXT NOT NULL
+    CREATE TABLE IF NOT EXISTS reviews (
+      id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+      store VARCHAR(50),
+      rating INTEGER,
+      sentiment_score INTEGER,
+      theme VARCHAR(100),
+      date TIMESTAMP
     );
 
     CREATE TABLE IF NOT EXISTS improvement_areas (
-      id SERIAL PRIMARY KEY,
-      pulse_id INT REFERENCES pulse_metrics(id) ON DELETE CASCADE,
-      priority VARCHAR(20) NOT NULL,
-      issue_description TEXT NOT NULL
+      id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+      theme VARCHAR(100),
+      priority VARCHAR(20),
+      description TEXT,
+      count INTEGER,
+      created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
   `;
 
@@ -47,75 +46,57 @@ export async function initDB() {
 }
 
 /**
- * Saves the pulse metrics and improvement areas to the database.
- * @param {Object} pulse The generated pulse object from the orchestrator
- * @param {Number} totalReviews Total reviews processed
+ * Saves the scraped reviews and LLM insights to the database.
+ * @param {String} pulse The generated pulse markdown
+ * @param {Object} themeData The LLM generated themes
+ * @param {Array} cleanedReviews Cleaned reviews array
  */
-export async function savePulseToDatabase(pulse, totalReviews) {
+export async function savePulseToDatabase(pulse, themeData, cleanedReviews) {
   if (!process.env.DATABASE_URL) return;
 
   const client = await pool.connect();
   try {
     await client.query('BEGIN');
 
-    // Parse simple metrics (assuming overall sentiment is mostly positive/neutral/negative)
-    // We'll extract a rough sentiment label from the pulse text, or just default it
-    const sentiment = pulse.content.toLowerCase().includes('positive') ? 'Positive' : 
-                      (pulse.content.toLowerCase().includes('negative') ? 'Negative' : 'Neutral');
-
-    // 1. Insert the main pulse metric record
-    const insertMetricText = `
-      INSERT INTO pulse_metrics (total_reviews, overall_sentiment, word_count, raw_pulse_markdown)
-      VALUES ($1, $2, $3, $4)
-      RETURNING id;
-    `;
-    const metricValues = [totalReviews, sentiment, pulse.wordCount, pulse.content];
-    
-    const metricRes = await client.query(insertMetricText, metricValues);
-    const pulseId = metricRes.rows[0].id;
-
-    // 2. Extract and insert "Improvement Areas" from the markdown
-    // We do a simple parse looking for lists under an 'improvement' or 'action' header
-    const lines = pulse.content.split('\n');
-    let capturingImprovements = false;
-    const improvementAreas = [];
-
-    for (const line of lines) {
-      const lower = line.toLowerCase();
-      if (lower.includes('improvement') || lower.includes('action') || lower.includes('issue')) {
-        capturingImprovements = true;
-        continue;
+    // 1. Insert Reviews
+    for (const review of cleanedReviews) {
+      const store = review.store || 'ios';
+      const rating = review.rating || 5;
+      
+      // Calculate a basic sentiment_score based on rating
+      let sentiment_score = rating * 20;
+      if (review.sentimentMismatch) {
+        sentiment_score = 100 - sentiment_score;
       }
       
-      // Stop capturing if we hit a new major section
-      if (capturingImprovements && line.startsWith('#') && !line.toLowerCase().includes('improvement')) {
-        capturingImprovements = false;
-      }
+      const theme = 'General';
+      const date = review.date || new Date().toISOString();
 
-      if (capturingImprovements && (line.trim().startsWith('-') || line.trim().startsWith('*'))) {
-        const issue = line.replace(/^[-*]\s*/, '').trim();
-        if (issue) {
-          // Assign pseudo-random priority based on keywords
-          const priority = (issue.toLowerCase().includes('crash') || issue.toLowerCase().includes('fail') || issue.toLowerCase().includes('error')) ? 'High' : 'Medium';
-          improvementAreas.push({ priority, issue });
-        }
-      }
+      await client.query(`
+        INSERT INTO reviews (store, rating, sentiment_score, theme, date)
+        VALUES ($1, $2, $3, $4, $5)
+      `, [store, rating, sentiment_score, theme, date]);
     }
 
-    // Insert extracted improvement areas
-    for (const area of improvementAreas.slice(0, 5)) { // Limit to top 5
-      const insertAreaText = `
-        INSERT INTO improvement_areas (pulse_id, priority, issue_description)
-        VALUES ($1, $2, $3)
-      `;
-      await client.query(insertAreaText, [pulseId, area.priority, area.issue]);
+    // 2. Insert Improvement Areas (from LLM themeData)
+    if (themeData && themeData.themes) {
+      for (const theme of themeData.themes) {
+        const priority = (theme.name.toLowerCase().includes('delivery') || theme.name.toLowerCase().includes('refund')) ? 'High' : 'Medium';
+        const description = (theme.quotes && theme.quotes.length > 0) ? theme.quotes.join(' | ') : 'User feedback pattern.';
+        const count = theme.count || 1;
+
+        await client.query(`
+          INSERT INTO improvement_areas (theme, priority, description, count)
+          VALUES ($1, $2, $3, $4)
+        `, [theme.name, priority, description, count]);
+      }
     }
 
     await client.query('COMMIT');
-    console.log(`✅ Saved pulse metrics to database (ID: ${pulseId}) with ${improvementAreas.length} improvement areas.`);
+    console.log(`✅ Saved ${cleanedReviews.length} reviews and ${themeData?.themes?.length || 0} improvement areas to database.`);
   } catch (err) {
     await client.query('ROLLBACK');
-    console.error('❌ Failed to save pulse to database:', err.message);
+    console.error('❌ Failed to save to database:', err.message);
   } finally {
     client.release();
   }

@@ -11,10 +11,11 @@ import {
   ResponsiveContainer
 } from 'recharts';
 import type { TrendDataPoint } from '@/lib/db';
+import { useDashboardContext } from './DashboardProvider';
 
 export function TrendsChart() {
   const [data, setData] = useState<TrendDataPoint[]>([]);
-  const [range, setRange] = useState('30d');
+  const { range } = useDashboardContext();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -32,30 +33,15 @@ export function TrendsChart() {
   }, [range]);
 
   return (
-    <div className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-3xl p-6 shadow-2xl">
-      <div className="flex justify-between items-center mb-8">
+    <div className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-3xl p-6 shadow-2xl h-full flex flex-col">
+      <div className="flex justify-between items-center mb-6">
         <div>
           <h2 className="text-xl font-semibold text-white tracking-wide">Sentiment Trends</h2>
           <p className="text-sm text-gray-400 mt-1">Review sentiment over time</p>
         </div>
-        <div className="flex space-x-2 bg-white/5 p-1 rounded-lg border border-white/10">
-          {['7d', '15d', '30d'].map(r => (
-            <button
-              key={r}
-              onClick={() => setRange(r)}
-              className={`px-4 py-1.5 rounded-md text-sm font-medium transition-all duration-200 ${
-                range === r 
-                  ? 'bg-emerald-500/20 text-emerald-400 shadow-[0_0_15px_rgba(16,185,129,0.2)]' 
-                  : 'text-gray-400 hover:text-gray-200 hover:bg-white/5'
-              }`}
-            >
-              {r.toUpperCase()}
-            </button>
-          ))}
-        </div>
       </div>
       
-      <div className="h-[300px] w-full">
+      <div className="flex-1 w-full min-h-[250px]">
         {loading ? (
           <div className="w-full h-full flex items-center justify-center">
             <div className="w-8 h-8 border-2 border-emerald-500 border-t-transparent rounded-full animate-spin"></div>

@@ -28,13 +28,18 @@ export type ImprovementArea = {
   count: number;
 };
 
-export async function getKPIMetrics(): Promise<KPIMetrics> {
+export async function getKPIMetrics(range: string = '30d'): Promise<KPIMetrics> {
+  let days = 30;
+  if (range === '7d') days = 7;
+  if (range === '15d') days = 15;
+
   const result = await pool.query(`
     SELECT 
       COUNT(*) as "totalReviews",
       ROUND(AVG(rating), 1) as "averageRating",
       ROUND(AVG(sentiment_score)) as "sentimentScore"
     FROM reviews
+    WHERE date >= NOW() - INTERVAL '${days} days'
   `);
   
   const row = result.rows[0];
@@ -61,17 +66,22 @@ export async function getTrendsData(range: string = '30d'): Promise<TrendDataPoi
     ORDER BY DATE(date) ASC
   `);
 
-  return result.rows.map(row => ({
+  return result.rows.map((row: any) => ({
     date: new Date(row.date).toISOString().split('T')[0],
     sentiment: parseInt(row.sentiment),
     volume: parseInt(row.volume)
   }));
 }
 
-export async function getImprovementAreas(): Promise<ImprovementArea[]> {
+export async function getImprovementAreas(range: string = '30d'): Promise<ImprovementArea[]> {
+  let days = 30;
+  if (range === '7d') days = 7;
+  if (range === '15d') days = 15;
+
   const result = await pool.query(`
     SELECT id, theme, priority, description, count 
     FROM improvement_areas 
+    WHERE created_at >= NOW() - INTERVAL '${days} days'
     ORDER BY 
       CASE priority 
         WHEN 'High' THEN 1 

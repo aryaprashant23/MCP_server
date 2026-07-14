@@ -3,13 +3,16 @@
 import { useEffect, useState } from 'react';
 import { Activity, MessageSquare, Star, TrendingUp } from 'lucide-react';
 import type { KPIMetrics } from '@/lib/db';
+import { useDashboardContext } from './DashboardProvider';
 
 export function KPICards() {
   const [metrics, setMetrics] = useState<KPIMetrics | null>(null);
+  const { range } = useDashboardContext();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('/api/metrics')
+    setLoading(true);
+    fetch(`/api/metrics?range=${range}`)
       .then(res => res.json())
       .then(data => {
         setMetrics(data);
@@ -19,7 +22,7 @@ export function KPICards() {
         console.error(err);
         setLoading(false);
       });
-  }, []);
+  }, [range]);
 
   if (loading || !metrics) {
     return (

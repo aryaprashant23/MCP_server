@@ -3,13 +3,16 @@
 import { useEffect, useState } from 'react';
 import { AlertCircle, ArrowRight, Flag } from 'lucide-react';
 import type { ImprovementArea } from '@/lib/db';
+import { useDashboardContext } from './DashboardProvider';
 
 export function ImprovementAreas() {
   const [areas, setAreas] = useState<ImprovementArea[]>([]);
+  const { range } = useDashboardContext();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('/api/areas')
+    setLoading(true);
+    fetch(`/api/areas?range=${range}`)
       .then(res => res.json())
       .then(data => {
         setAreas(data);
@@ -19,7 +22,7 @@ export function ImprovementAreas() {
         console.error(err);
         setLoading(false);
       });
-  }, []);
+  }, [range]);
 
   return (
     <div className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-3xl p-6 shadow-2xl h-full flex flex-col">

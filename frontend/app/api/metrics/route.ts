@@ -1,9 +1,12 @@
 import { NextResponse } from 'next/server';
 import { getKPIMetrics } from '@/lib/db';
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
-    const data = await getKPIMetrics();
+    const { searchParams } = new URL(request.url);
+    const range = searchParams.get('range') || '30d';
+
+    const data = await getKPIMetrics(range);
     return NextResponse.json(data);
   } catch (error) {
     console.error('Failed to fetch KPI metrics:', error);

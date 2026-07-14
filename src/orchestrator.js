@@ -68,8 +68,9 @@ export async function runWeeklyPulse() {
     summary.pulseGenerated = true;
     summary.pulseWordCount = validation.details.wordCount;
 
-    const pulsePath = path.resolve(process.cwd(), 'weekly_pulse.md');
-    await fs.writeFile(pulsePath, pulse, 'utf-8');
+    // Commented out to save directly to DB instead of local markdown file
+    // const pulsePath = path.resolve(process.cwd(), 'weekly_pulse.md');
+    // await fs.writeFile(pulsePath, pulse, 'utf-8');
 
     // ════════════════════════════════════════════════════════════════════════
     // Phase 5: Google Docs, Gmail & DB Integration
@@ -77,7 +78,7 @@ export async function runWeeklyPulse() {
     console.log('\n═══ Phase 5: Google Docs, Gmail & DB Integration ═══\n');
 
     console.log('📋 Saving to Database...');
-    await savePulseToDatabase(pulse, allReviews.length);
+    await savePulseToDatabase(pulse, themeData, cleanedReviews);
 
     const docsResult = await publishToGoogleDocs(pulse);
     summary.googleDocUrl = docsResult.docUrl;
